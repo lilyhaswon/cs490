@@ -1,2 +1,2 @@
 # CS490
-School Project about a fictional new app
+School Project about a fictional news app
