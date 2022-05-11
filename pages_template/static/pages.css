@@ -1,0 +1,77 @@
+/* 
+table,tr,td {
+border: 1px solid black;
+}
+*/
+
+/*for the footer to be centeredis*/
+#footRight{
+	margin-left: 20px;
+}
+
+/*Center the form in the middle*/
+.spaceFill{
+	width: 100%;
+	height: 100px;
+}
+
+/*Make the grey part bigger */
+.topSpaceFill{
+	width: 100%;
+	height: 20px;
+}
+
+/*Fill in space for the back button*/
+.fullWidth{
+	width:400px;
+}
+
+/*max width and height of nav bar*/
+#navMax{
+	border: 1px solid black;
+	width:100%;
+	background-color:#FFFFFF;
+}
+
+/*tabs in the nav bar*/
+#navSpace{
+	max-width: 60px;
+	min-width: 60px;
+	height: 40px;
+	max-height: 40px;
+	min-height: 40px;
+	border: 1px solid black;
+	text-align: center;
+}
+
+#footer_table{
+	border: 1px solid black;
+	background-color:#FFFFFF;
+	width:100%;
+	height: 100px;
+}
+
+.paperBackground{
+	background-image: url(newspapers.jpg);
+}
+
+#header_table {
+	height: 100px;
+	width: 100%;
+	background-color:#FFFFFF;
+}
+
+#glass{
+	height:16px;
+	width:19px;
+}
+
+#logo{
+	height:100px;
+	width:80%;
+}
+
+.moveLeft{
+	float:right;
+
+}

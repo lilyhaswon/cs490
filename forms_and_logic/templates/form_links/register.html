@@ -1,0 +1,66 @@
+{% extends 'form_base.html' %}
+
+{% block content %} 
+<!-- Register page -->
+<title>Registration Form</title>
+<head>
+    <script>
+        /* Hide passwords */  
+        function hidePassword() {
+            var x = document.getElementById("id_password1"); /*django's default id's*/
+            if (x.type === "password"){
+                x.type = "text";
+            }else{
+                x.type = "password";
+            }
+        }
+        
+        function hidePasswordv() {
+            var x = document.getElementById("id_password2"); /*django's default id's*/
+            if (x.type === "password"){
+                x.type = "text";
+            }else{
+                x.type = "password";
+            }
+        }
+    
+    </script>    
+</head>
+
+    <form action = "." method="post">{% csrf_token %}
+        <div id = "registerForm_table">
+            <br>
+            
+            <!-- the form layout -->    
+            {% for field in registration_form %} <!-- can be found in views.py -->
+                <div id ="moveRight">
+                <p>
+                {{field.label_tag}} <!-- look in forms.py for RegisterationForm -->
+                {% if field.auto_id == "id_password1" %} <!-- showing hidden password -->
+                    {{field}}
+                    <input type = "checkbox" onclick = "hidePassword()">Show Password
+                {% elif field.auto_id == "id_password2" %}<!-- showing hidden password -->
+                    {{field}}
+                    <input type = "checkbox" onclick = "hidePasswordv()">Show Password
+                {% else %}
+                    {{field}}
+                {% endif %}
+                </p>
+                </div>
+    <!-- where all the error messages comes from -->   
+                {% for error in field.errors %} 
+                <div id = "errorColor">
+                <p>
+                    {{error}} <!-- django's default password and email errors -->
+                </p>
+                </div>
+                {% endfor %}
+            {% endfor %}
+            <div id ="moveRight">
+            <button type="submit">Register</button>
+            </div>
+            <br>
+        </div>
+    </form>
+    <br> 
+{% endblock %}

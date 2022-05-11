@@ -1,0 +1,226 @@
+{% extends 'form_base.html' %} 
+
+{% block content %} 
+{% load static %}
+
+<script> // the whole script is for the chkbox for user chosen preferences 
+    $(document).ready(function()
+    {
+        $('.chkbox').click(function()
+        {
+            var text = "";
+            $('.chkbox:checked').each(function()
+            {
+                text+=$(this).val()+',';
+            });
+            text=text.substring(0,text.length-1); //gets rid of extra comma at the end of the last statement 
+            $('#chktext').val(text);
+        });
+        $('#but1').click(function()
+        {
+            alert("Record Saved Sucessfully")
+        });
+    });
+</script>
+
+{% if request.user.is_authenticated %} <!-- user is logged in  -->
+    <title>Profile</title>
+    <h1>Profile page </h1> 
+    <p>
+    <!-- If Auth user is viewing their own profile -->
+    Hello user:, {{request.user.username}} <br><br>
+    <!-- display current username  -->
+    <a href="{% url 'change_password' %}"><button>change password</button> </a>
+    </p>
+
+<!-- letting users chose their own search tabs for articles  -->
+<form action = "." method="POST">{% csrf_token %}
+    <input type="checkbox" class = "chkbox" value = "Business">
+    <label> Business</label><br>
+    
+    <input type="checkbox" class = "chkbox" value = "Entertainment">
+    <label> Entertainment</label><br>
+
+    <input type="checkbox" class = "chkbox" value = "General">
+    <label> General</label><br>
+    
+    <input type="checkbox" class = "chkbox" value = "Health">
+    <label> Health</label><br>
+    
+    <input type="checkbox" class = "chkbox" value = "Science">
+    <label> Science</label><br>
+    
+    <input type="checkbox" class = "chkbox" value = "Sports"> 
+    <label> Sports</label><br>
+    
+    <input type="checkbox" class = "chkbox" value = "Technology">
+    <label> Technology</label><br>
+    
+    <input type = "text" id = "chktext" name = "coursename" placeholder="Type Here"><br>
+    <input type="submit" id = "but1" value = "Insert Record">
+</form>
+
+    <div class="">
+        <!-- THEM to YOU -->
+        {% if request_sent == 0 %}  <!-- this is referancing the friends.views def(its the last one on the list) -1,0,1 all have a different value-->
+            <div class="">
+                <div class=""> 
+                    <span class="">Accept Friend Request</span>
+                    <span id="id_cancel_{{id}}" class="" onclick='triggerDeclineFriendRequest("{{pending_friend_request_id}}")'>cancel</span>        <!-- this does not work yet-->
+
+                    <span id="id_confirm_{{id}}" class="" onclick='triggerAcceptFriendRequest("{{pending_friend_request_id}}")'>check</span>
+                    <!-- this does not work yet-->
+                </div>
+            </div>
+        {% endif %}
+    
+        <div class="">
+            <!-- Cancel Friend Request / Send Friend Request / Remove Friend -->
+            {% if is_friend == False and is_self == False %}
+            <!-- its a if asking if the profile your looking at is a friend-->
+                    <!-- You sent them a request -->
+                    {% if request_sent == 1 %} <!-- this is referancing the friends.views def(its the last one on the list) -1,0,1 all have a different value-->
+                    <div class="">
+                        <button class="" id="id_cancel_friend_request_btn">
+                            Cancel Friend Request
+                        </button> <!-- this does not work yet-->
+
+                    </div>
+                    {% endif %}
+                    <!-- No requests have been sent -->
+                    {% if request_sent == -1 %}<!-- this is referancing the friends.views def(its the last one on the list) -1,0,1 all have a different value-->
+                    <div class="">
+                        <button class="" id="id_send_friend_request_btn">
+                            Send Friend Request
+                        </button><!-- this does not work yet...-->
+                    </div>
+                    {% endif %}
+            {% endif %}
+                
+                
+            {% if is_friend %}<!-- if we are looking at our friend-->
+                <div class="">
+                    <button class="" type="button" id="id_friends_toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Friend
+                    </button>
+                    <div class="" aria-labelledby="id_friends_toggle">
+                        <a class="" href="#" onclick="removeFriend('{{id}}', onFriendRemoved)">Unfriend</a>
+                    </div><!-- this does not work yet-->
+                </div>
+            {% endif %}
+            
+            <!-- Friend list link -->
+              <div class="">
+                        <a href="#">
+                            <div class="">
+                                <span class="friend-text"><br>Friends ({{friends|length}})</span> <!-- looks into your friendlist and gives back the number of friends-->
+                            <br>
+                            </div>
+                        </a>
+                    </div>
+    <br>
+        </div>
+    
+        {% if friend_requests %}
+        <div class="card m-2 px-4 pb-4">
+            <!-- Friend requests -->
+              <div class="d-flex flex-column pt-4">
+                <a href="#">
+                    <div class="">
+                        <span class="">person_add</span><span class="friend-text">Friend Requests ({{friend_requests|length}})</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    
+    </div>
+    {% endif %}
+
+    
+    
+    {% load static %}
+
+        <div class=""> <!--form for friendship search bar-->
+    
+            <form class="search-bar justify-content-start" onsubmit="return executeQuery();">
+                Find potential friends: <input type="text" class="form-control" name="q" id="pfriend" placeholder=" Will friendship find you?...">
+                <button type="submit" value="Search">Search</button>
+            </form>
+        </div>
+    </div>
+    
+    
+    <script type="text/javascript"> //this is the searching of friends
+        function executeQuery() { 
+            var query = ""
+            if (query == ""){
+                query = document.getElementById('pfriend').value;
+            }
+            else{
+                print("you don't want friends?")
+            }
+            window.location.replace("{% url 'search' %}?q=" + query)
+            return false
+        }
+    
+    </script>
+    
+    <script type="text/javascript">//it reloads when we send a request be it a request
+    
+    function onFriendRequestSent(){
+            location.reload(); //location is just the current page they're on mostlikey the profile page of another user
+        }
+    
+        function onFriendRequestCancelled(){
+            location.reload();
+        }
+    
+        function onFriendRemoved(){
+            location.reload(); //reload to see if their there (click cancel friend request and it spits that a friend request was sent)
+        }
+    
+        function onFriendRequestAccepted(){
+            location.reload(); //reload to see if their there
+        }
+    
+        function onFriendRequestDeclined(){
+            location.reload(); //reload to see if their there
+        }
+    
+    
+        var sendFriendRequestBtn = document.getElementById("id_send_friend_request_btn")
+        if (sendFriendRequestBtn != null){
+            sendFriendRequestBtn.addEventListener("click", function(){
+                sendFriendRequest("{{id}}", onFriendRequestSent)
+            })
+        }
+    
+        var cancelFriendRequestBtn = document.getElementById("id_cancel_friend_request_btn")
+        if(cancelFriendRequestBtn != null){
+            cancelFriendRequestBtn.addEventListener("click", function(){
+                //cancelFriendRequest("{{id}}", onFriendRequestCancelled)
+            })
+        }
+    
+        var removeFriendBtn = document.getElementById("id_unfriend_btn")
+        if (removeFriendBtn != null){
+            removeFriendBtn.addEventListener("click", function(){
+                //removeFriend("{{id}}", onFriendRemoved)
+            })
+        }
+    
+        function triggerAcceptFriendRequest(friend_request_id){
+            //acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
+        }
+    
+        function triggerDeclineFriendRequest(friend_request_id){
+            //declineFriendRequest(friend_request_id, onFriendRequestDeclined)
+        }
+  
+    
+    </script>
+    
+    {% endblock content %}
+    {% include 'friendship/send_friend_request.html' %}
+    <!--looking into our friendship folder and geting the js file called send_Friend_request.html-->

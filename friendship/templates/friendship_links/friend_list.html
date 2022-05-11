@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+
+	.friends-text{
+		color: #000;
+		font-weight: 500;
+	}
+	.friends-text-container{
+		border: 1px solid #cccccc;
+		border-radius: 12px;
+	}
+	.friends-btn:hover {
+		background-color: #bfbfbf;
+		border-color: #bfbfbf;
+	}
+	.dropdown-toggle::after { 
+		content: none; 
+	}
+	.profile-link{
+		color: #000;
+	}
+
+</style>
+
+<div >
+	<div>
+
+		{% if friends %}
+		<div>
+		{% for friend in friends %}
+		<div >
+			
+			<div >
+				<a  href="{% url 'forms_and_logic:view' user_id=friend.0.pk %}">
+					<h4 >{{friend.0.username}}</h4>: your followers
+				</a>
+			</div>
+			
+			<div >
+				{% if friend.1 %}
+					<div >
+						<p>
+							{{friend.1.username}}
+							: Following 
+						</p>
+
+					</div>
+				
+				{% endif %}
+			</div>
+		</div>
+		
+		{% if forloop.counter|divisibleby:2 %}
+		</div><div >
+		{% endif %}
+		
+		{% endfor %}
+		
+		{% else %} <!-- If no friends -->
+		<div >
+			<p>No friends/follows :(</p>
+		</div>
+		{% endif %}
+		</div>
+	</div>
+	
+</div>
+
+{% endblock content %}
+

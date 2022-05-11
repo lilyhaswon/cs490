@@ -1,0 +1,65 @@
+{% extends 'form_base.html' %}
+
+{% block content %} 
+<!-- Login page -->
+<title>Login Form</title>
+<head>
+    <script>
+        /* Hide passwords */  
+        function hidePassword() {
+            var x = document.getElementById("id_password"); /*django's default id's*/
+            if (x.type === "password"){
+                x.type = "text";
+            }else{
+                x.type = "password";
+            }
+        }
+    </script>    
+</head>
+
+    <form action = "." method="post">{% csrf_token %}
+        <div id = "loginForm_table">
+            <br>
+            
+            <!-- the form layout -->   
+            {% for field in login_form %} <!-- can be found in views.py -->
+                <div id ="moveRight">
+                <p>
+                {{field.label_tag}} <!-- look in forms.py for AccountAuthenticationForm -->
+                {% if field.auto_id == "id_password" %} <!-- showing hidden password -->
+                    {{field}}
+                    <input type = "checkbox" onclick = "hidePassword()">Show Password
+                {% else %}
+                    {{field}}
+                {% endif %}
+                </p>
+                </div>
+            {% endfor %}
+
+    <!-- where all the error messages comes from -->
+    <!-- sections are splited to avoid double printing of the same error -->
+            {% for field in login_form %}
+                {% for error in field.errors %} 
+                <div id = "errorColor">
+                <p>
+                    {{error}} <!-- django's default password and email errors -->
+                </p>
+                </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% if login_form.non_field_errors %}
+                <div id = "errorColor">
+                <p>
+                    {{login_form.non_field_errors}} <!-- other errors that are not user typoes -->
+                </p>
+                </div>
+            {% endif %}
+            <div id ="moveRight">
+            <button type="submit">Login</button>
+            </div>
+            <br>
+        </div>
+    </form>
+    <br> 
+{% endblock %}

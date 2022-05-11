@@ -1,0 +1,14 @@
+<!-- main template, will change on all pages -->
+<!DOCTYPE html>
+<html>
+    {% include 'header.html' %} <!-- get the header.html and how users are logged in and out, where all the css imports are -->
+<div class = "paperBackground">
+    {% include 'navbar.html' %} <!-- get the navbar.html  -->
+    <br>
+    {% block content %} <!-- will only appear if other page fails  -->
+        <p>template being worked on</p>
+    {% endblock %}
+
+    {% include 'footer.html' %} <!-- get the footer.html  -->
+</div>
+</html>

@@ -1,0 +1,84 @@
+{% extends 'form_base.html' %}
+
+{% block content %}
+<!-- Change password page -->
+<title>Change password Form</title>
+
+<head>
+    <script>
+        /* Hide passwords */  
+        function hidePasswordOld() {
+            var x = document.getElementById("id_old_password"); /*django's default id's*/
+            if (x.type === "password"){
+                x.type = "text";
+            }else{
+                x.type = "password";
+            }
+        }
+
+        function hidePassword1() {
+            var x = document.getElementById("id_new_password1"); /*django's default id's*/
+            if (x.type === "password"){
+                x.type = "text";
+            }else{
+                x.type = "password";
+            }
+        }
+
+        function hidePassword2() {
+            var x = document.getElementById("id_new_password2"); /*django's default id's*/
+            if (x.type === "password"){
+                x.type = "text";
+            }else{
+                x.type = "password";
+            }
+        }
+    </script>    
+</head>
+
+<form action = "." method="post">{% csrf_token %}
+    <div id = "resetForm_table">
+        <br>
+        <div id = "moveRight">
+            <p><label for = "old_password">Old password:</label>
+            <input name="old_password" type="password" id="id_old_password" required="true">
+            <input type = "checkbox" onclick = "hidePasswordOld()">Show Password
+            </p>
+            <p><label for = "old_password">New password:</label>
+            <input name="new_password1" type="password" id="id_new_password1" required="true">
+            <input type = "checkbox" onclick = "hidePassword1()">Show Password
+            </p>
+            <label for = "old_password">Confirm password:</label>
+            <input name="new_password2" type="password" id="id_new_password2" required="true">
+            <input type = "checkbox" onclick = "hidePassword2()">Show Password
+        </div>
+        <!-- what is required for a new vaild password -->    
+            <ul>
+                <li>Your password can’t be too similar to your other personal information. 
+                <li>Your password must contain at least 8 characters.
+                <li>Your password can’t be a commonly used password.
+                <li>Your password can’t be entirely numeric.
+            </ul>
+       
+     
+<!-- All the error messages -->        
+    {% for field in form %} <!-- django's default error messages -->
+      {% for error in field.errors %}
+        <div id = "errorColor">
+        {{ error }}
+        </div>
+      {% endfor %}
+    {% endfor %}
+    
+    <br>
+    <div id = "moveRight">
+    <button type="submit"> Change Password</button>
+    </div>
+
+    
+<br>
+</div>
+</form>
+
+<br>
+{% endblock %}

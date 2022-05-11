@@ -1,0 +1,39 @@
+<script type="text/javascript"> 
+//<!--JS code in a html file-->
+	
+	function sendFriendRequest(id, uiUpdateFunction){
+		payload = { //unique info to use as the id
+			"csrfmiddlewaretoken": "{{ csrf_token }}",
+			"receiver_user_id": id, //we need a security feature when sending a jax on django
+		}
+		$.ajax({ //passing the payload
+			type: 'POST',
+			dataType: "json",
+			url: "{% url 'friendship:friend-request' %}",
+			timeout: 5000, 
+			data: payload,
+			success: function(data) {
+				console.log("SUCCESS", data) //safely sent
+				if(data['response'] == "Friend request sent."){
+					// ui is updated
+				}
+				else if(data['response'] != null){ //it was not sent
+					alert(data['response'])
+				}
+			}, 
+			error: function(data) { //when everything goes wrong
+				console.error("ERROR...", data)
+				alert("Something went wrong."+data)
+			},
+			complete: function(data){
+				uiUpdateFunction()
+			}
+		});
+	}
+	
+
+</script>
+
+
+
+

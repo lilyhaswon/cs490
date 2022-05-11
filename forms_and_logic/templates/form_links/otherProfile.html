@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}   
+{% load static %}
+<!-- user is logged in  -->
+
+<div>
+	{%  if is_self == true %}
+    <title>Profile</title>
+    <h1>Profile page </h1> 
+    <p>
+    <!-- If Auth user is viewing their own profile -->
+    Hello user:, {{request.user.username}} <br><br>
+    <!-- display current username  -->
+    <a href="{% url 'change_password' %}"><button>change password</button> </a>
+    </p>		
+		<div class=""> <!--form for friendship search bar-->
+      <form  onsubmit="return executeQuery();">
+         Find potential friends: <input type="text"  name="q" id="pfriend" placeholder=" Will friendship find you?...">
+				 <button type="submit" value="Search">Search</button>
+			</form>
+     </div>
+		{% else %}
+    <h1>{{username}}'s page! </h1> 
+		 	Are they friends? <br>
+				 	{% if is_friend %} 
+				 		 You is!
+					{% else %}
+		 					No but you could be!
+					{% endif %}<br><br>
+
+		<h1>Email: </h1>
+		{%  if is_self %}
+		<!--its viewing the the current user profile-->
+			<h5>{{request.user.email}}</h5>
+			<h1>Username:</h1>
+  		<h5>{{request.user.username}}</h5>
+
+		{%  else %}
+	  <h5>{{email}}</h5>  <br>        
+  		<h1>Username</h1>
+  		<h5>{{username}}</h5>
+		{% endif %}
+
+		
+	{% endif %}
+</div><!--user or friend info in a div (changing the userview with the other profile view)-->
+{% if request.user.is_authenticated  %}
+	<div class=""><!-- THEM to YOU --> 
+	{% if request_sent == 0 %} 
+	<div class=""> 
+		<div class="">
+			<span id="id_cancel_{{id}}" class="" onclick='triggerDeclineFriendRequest("{{pending_friend_request_id}}")'>Follower</span>
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="">
+		<!-- Cancel Friend Request / Send Friend Request / Remove Friend -->
+		{% if is_friend == False and is_self == False %}
+				<!-- You sent them a request -->
+				{% if request_sent == 1 %}
+				<div class="">
+					<button class="">
+						UnFollow
+					</button>
+				</div>
+				{% endif %}
+				<!-- No requests have been sent -->
+				{% if request_sent == -1 %}
+				<div class="">
+					<button class="" id="id_send_friend_request_btn">
+						Follow?
+					</button>
+				</div>
+				{% endif %}
+		{% endif %}
+					
+
+		<div ><!--to see their friends-->
+			<a href="{% url 'friendship:list' user_id=id %}">
+				<div class="">
+					Follows: ({{friends|length}})
+				</div>
+			</a>
+		</div>
+
+	</div><!-- Cancel Friend Request / Send Friend Request / Remove Friend-->
+
+	</div>
+{% endif %}
+</div>
+
+
+<script type="text/javascript"> //this is the searching of friends
+	function executeQuery() { 
+			var query = ""
+			if (query == ""){
+					query = document.getElementById('pfriend').value;
+			}
+			else{
+					print("you don't want friends?")
+			}
+			window.location.replace("{% url 'search' %}?q=" + query)
+			return false
+	}
+
+</script>
+
+<script type="text/javascript">//it reloads when we send a request be it a request
+    
+	function onFriendRequestSent(){
+					location.reload(); //location is just the current page they're on mostlikey the profile page of another user
+			}
+	
+			function onFriendRequestCancelled(){
+					location.reload();
+			}
+	
+			function onFriendRemoved(){
+					location.reload(); //reload to see if their there (click cancel friend request and it spits that a friend request was sent)
+			}
+
+	
+			var sendFriendRequestBtn = document.getElementById("id_send_friend_request_btn")
+			if (sendFriendRequestBtn != null){
+					sendFriendRequestBtn.addEventListener("click", function(){
+							sendFriendRequest("{{id}}", onFriendRequestSent)
+					})
+			}
+	
+			var cancelFriendRequestBtn = document.getElementById("id_cancel_friend_request_btn")
+			if(cancelFriendRequestBtn != null){
+					cancelFriendRequestBtn.addEventListener("click", function(){
+							//cancelFriendRequest("{{id}}", onFriendRequestCancelled)
+					})
+			}
+	
+			var removeFriendBtn = document.getElementById("id_unfriend_btn")
+			if (removeFriendBtn != null){
+					removeFriendBtn.addEventListener("click", function(){
+							//removeFriend("{{id}}", onFriendRemoved)
+					})
+			}
+	
+	
+	</script>
+{% include 'friendship_links/send_friend_request.html' %} <!--may be a problem linkage-->
+{#% include 'friendship_links/cancel_friend_request.html' %#}
+
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}<!--home.html :D-->
+
+{% block content %}
+<title>Home</title> <!--tab label--> 
+{% if request.user.is_authenticated %} <!-- user is logged in  -->
+    <p align = "center" >
+    <b> Now logged in</b> 
+    </p>
+{% endif %}
+
+<style type="text/css">
+	.my-grid{
+		border: 1px solid black;
+	}
+	.my-grid-item{
+		border: 1px solid rgb(101, 101, 167);
+	}
+</style>
+
+<meta charset = "UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+
+<!-- I made this a comment so I can contiue to edit without -->
+<div>
+	<form>
+
+	</form>
+</div>
+<div align = "center" >
+	{% for i in articles %} <!-- articles from the news api website -->
+		<div class="card rounded shadow-lg m-2" style="width: 60%;" align="center">
+			<img src="{{ i.urlToImage }}" class="card-img-top" alt="image not avaiable">
+			<div class="card-body">
+			<p class="card-text">{{ i.author }}</p>
+			<h5 class="card-title">{{ i.title }}</h5>
+			<p class="card-title">{{ i.source.name }}</p>
+			<p class="card-text">{{ i.description }}</p>
+			<hr>
+			<small>Date: {{ i.publishedAt }}</small>
+			<a href="{{ i.url }}" target="_blank" class="btn btn-success m-1">See News Article</a>
+			</div>
+		</div>
+
+    {% endfor %}
+</div>
+{% endblock content %}

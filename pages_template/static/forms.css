@@ -1,0 +1,41 @@
+
+#registerForm_table {
+	margin-left: 30%;
+	width:520px;
+	background-color:#c9c9c9cc;
+}
+
+#loginForm_table {
+	margin-left: 30%;
+	width:440px;
+	background-color:#c9c9c9cc;
+}
+
+#resetForm_table {
+	margin-left: 28%;
+	width:540px;
+	background-color:#c9c9c9cc;
+}
+
+/*main form template, but can be changed if needed*/
+#form_table {
+	margin-left: 35%;
+	width:400px;
+	background-color:#c9c9c9cc;
+}
+
+#errorColor{
+	color: red;
+	margin-left: 40px;
+}
+
+/* moves form more to the right for forms*/
+#moveRight{
+	margin-left: 40px;
+}
+
+#formlogo{
+	height:100px;
+	width:60%;
+	margin-left: 33%;
+}

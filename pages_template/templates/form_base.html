@@ -1,0 +1,14 @@
+<!-- Same as the other base.html, but with different header -->
+<!DOCTYPE html>
+<html>
+    {% include 'form_header.html' %} <!-- get the header.html and how users are logged in and out, where all the css imports are -->
+<div class = "paperBackground">
+    {% include 'navbar.html' %} <!-- get the navbar.html  -->
+    <br>
+    {% block content %} <!-- will only appear if other page fails  -->
+        <p>template being worked on</p>
+    {% endblock %}
+
+    {% include 'footer.html' %} <!-- get the footer.html  -->
+</div>
+</html>
